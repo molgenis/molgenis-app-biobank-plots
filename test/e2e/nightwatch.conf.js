@@ -7,7 +7,7 @@ var defaultPauzeBeforeTestStart = 3000
 // http://nightwatchjs.org/gettingstarted#settings-file
 module.exports = {
   src_folders: ['test/e2e/specs'],
-  output_folder: 'test/e2e/reports'
+  output_folder: 'test/e2e/reports',
 
   selenium: {
     start_process: true,
