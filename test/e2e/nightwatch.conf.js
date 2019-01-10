@@ -2,6 +2,9 @@ require('babel-register')
 var config = require('../../config')
 var packageJson = require('../../package.json');
 
+const buildName = packageJson.name + '#PR-' + process.env.CHANGE_ID + '-build-' + process.env.BUILD_NUMBER
+const ciDevServer = 'http://' + process.env.JENKINS_AGENT_NAME + ':' + (process.env.PORT || config.dev.port)
+
 var defaultPauzeBeforeTestStart = 3000
 
 // http://nightwatchjs.org/gettingstarted#settings-file
@@ -41,11 +44,12 @@ module.exports = {
       access_key: process.env.SAUCE_CRED_PSW,
       desiredCapabilities: {
         name: packageJson.name,
-        build: packageJson.name + '#build-${BUILD_NUMBER}',
+        build: buildName,
         'tunnel-identifier': process.env.TUNNEL_IDENTIFIER,
         browserName: 'chrome'
       },
       globals: {
+        devServerURL: ciDevServer,
         waitForConditionTimeout: 10000,
         waitBeforeTestStart: defaultPauzeBeforeTestStart
       }
@@ -60,11 +64,12 @@ module.exports = {
       access_key: process.env.SAUCE_CRED_PSW,
       desiredCapabilities: {
         name: packageJson.name,
-        build: packageJson.name + '#build-${BUILD_NUMBER}',
+        build: buildName,
         'tunnel-identifier': process.env.TUNNEL_IDENTIFIER,
         browserName: 'firefox'
       },
       globals: {
+        devServerURL: ciDevServer,
         waitForConditionTimeout: 10000,
         waitBeforeTestStart: defaultPauzeBeforeTestStart
       }
@@ -79,13 +84,14 @@ module.exports = {
       access_key: process.env.SAUCE_CRED_PSW,
       desiredCapabilities: {
         name: packageJson.name,
-        build: packageJson.name + '#build-${BUILD_NUMBER}',
+        build: buildName,
         'tunnel-identifier': process.env.TUNNEL_IDENTIFIER,
         browserName: 'internet explorer',
         platform: 'Windows 10',
         version: '11.103',
       },
       globals: {
+        devServerURL: ciDevServer,
         waitForConditionTimeout: 10000,
         waitBeforeTestStart: defaultPauzeBeforeTestStart
       }
@@ -100,11 +106,12 @@ module.exports = {
       access_key: process.env.SAUCE_CRED_PSW,
       desiredCapabilities: {
         name: packageJson.name,
-        build: packageJson.name + '#build-${BUILD_NUMBER}',
+        build: buildName,
         'tunnel-identifier': process.env.TUNNEL_IDENTIFIER,
         browserName: 'safari'
       },
       globals: {
+        devServerURL: ciDevServer,
         waitForConditionTimeout: 10000,
         waitBeforeTestStart: 5000
       }

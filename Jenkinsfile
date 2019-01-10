@@ -75,8 +75,7 @@ pipeline {
         branch 'master'
       }
       environment {
-        ORG = 'molgenis'
-        APP_NAME = 'molgenis-app-biobank-plots'
+        REPOSITORY = 'molgenis/molgenis-app-biobank-plots'
         REGISTRY = 'registry.molgenis.org'
       }
       steps {
@@ -93,9 +92,7 @@ pipeline {
         }
         milestone 2
         container('node') {
-          sh "git config --global user.email molgenis+ci@gmail.com"
-          sh "git config --global user.name molgenis-jenkins"
-          sh "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${ORG}/${APP_NAME}.git"
+          sh "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
 
           sh "git checkout -f ${BRANCH_NAME}"
 
@@ -103,6 +100,7 @@ pipeline {
           sh "npm version ${RELEASE_SCOPE} -m '[ci skip] [npm-version] %s'"
 
           sh "git push --tags origin ${BRANCH_NAME}"
+          hubotSend(message: '${env.REPOSITORY} has been successfully deployed on ${env.REGISTRY}.', status:'SUCCESS')
         }
       }
     }
@@ -112,6 +110,12 @@ pipeline {
       container('node') {
         sh "daemon --name=sauceconnect --stop"
       }
+    }
+    success {
+      hubotSend(message: 'Build success', status:'INFO', site: 'slack-pr-app-team')
+    }
+    failure {
+      hubotSend(message: 'Build success', status:'ERROR', site: 'slack-pr-app-team')
     }
   }
 }
