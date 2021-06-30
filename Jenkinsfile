@@ -25,7 +25,7 @@ pipeline {
           }
         }
         container('node') {
-          sh "daemon --name=sauceconnect -- /usr/local/bin/sc -u ${SAUCE_CRED_USR} -k ${SAUCE_CRED_PSW} -i ${TUNNEL_IDENTIFIER}"
+          startSauceConnect()
         }
       }
     }
